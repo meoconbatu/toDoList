@@ -17,9 +17,8 @@ var tasks []Task
 func main() {
 	router := gin.Default()
 	router.HTMLRender = gintemplate.Default()
-
 	router.GET("/", func(ctx *gin.Context) {
-		ctx.HTML(http.StatusOK, "page.html", gin.H{"title": "To do list"})
+		ctx.HTML(http.StatusOK, "page.html", gin.H{"title": "To do list", "tasks": tasks})
 	})
 	router.POST("/newTask", func(c *gin.Context) {
 		var t Task
