@@ -1,0 +1,18 @@
+<!doctype html>
+
+<html>
+    <head>
+        <title>{{.title}}</title>
+    </head>
+
+    <body>
+        <hr>
+        <form action="/newTask" method="POST">
+            Task:<br>
+            <input type="text" name="title"><br><br>
+            <input type="text" name="content"><br><br>
+            <input type="submit" value="Add">
+        </form>
+        <hr>
+    </body>
+</html>
