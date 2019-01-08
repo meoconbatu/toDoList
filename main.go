@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/foolin/gin-template"
 	"github.com/gin-gonic/gin"
@@ -16,15 +17,19 @@ type Task struct {
 }
 
 var (
-	db  *gorm.DB
-	err error
+	db     *gorm.DB
+	err    error
+	router *gin.Engine
 )
 
 func main() {
-	router := gin.Default()
+	router = gin.Default()
 	router.HTMLRender = gintemplate.Default()
 
-	db, err = gorm.Open("sqlite3", "./gorm.db")
+	dialect := os.Getenv("TODOLIST_DIALECT")
+	param := os.Getenv("TODOLIST_PARAM")
+	// db, err = gorm.Open("sqlite3", "./gorm.db")
+	db, err = gorm.Open(dialect, param)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -32,23 +37,24 @@ func main() {
 
 	db.AutoMigrate(&Task{})
 
-	router.GET("/", func(ctx *gin.Context) {
-		var tasks []Task
-		db.Find(&tasks)
-		ctx.HTML(http.StatusOK, "page.html", gin.H{"title": "To do list", "tasks": tasks})
-	})
-
-	router.POST("/newTask", func(c *gin.Context) {
-		var t Task
-		if err := c.ShouldBind(&t); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
-		}
-		db.Create(&t)
-		c.Request.URL.Path = "/"
-		c.Request.Method = "GET"
-		router.HandleContext(c)
-	})
+	router.GET("/", ViewTask)
+	router.POST("/newTask", CreateTask)
 
 	router.Run(":8080")
+}
+func ViewTask(ctx *gin.Context) {
+	var tasks []Task
+	db.Find(&tasks)
+	ctx.HTML(http.StatusOK, "page.html", gin.H{"title": "To do list", "tasks": tasks})
+}
+func CreateTask(c *gin.Context) {
+	var t Task
+	if err := c.ShouldBind(&t); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	db.Create(&t)
+	c.Request.URL.Path = "/"
+	c.Request.Method = "GET"
+	router.HandleContext(c)
 }

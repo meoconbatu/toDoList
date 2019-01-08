@@ -6,19 +6,21 @@
     </head>
 
     <body>
+        New task:<br>
         <hr>
-        {{if .tasks}}
-        {{range .tasks}}
-        {{.Title}} - {{.Content}}
-        <br>
-        {{end}}
-        {{end}}
         <form action="/newTask" method="POST">
-            Task:<br>
+            Title: <br>
             <input type="text" name="title"><br><br>
+            Content: <br>
             <input type="text" name="content"><br><br>
             <input type="submit" value="Add">
         </form>
         <hr>
+        {{if .tasks}}
+            {{range .tasks}}
+                <input type="checkbox"> {{.Title}} - {{.Content}}
+                <br>
+            {{end}}
+        {{end}}
     </body>
 </html>
