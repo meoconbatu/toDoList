@@ -17,10 +17,17 @@
         </form>
         <hr>
         {{if .tasks}}
-            {{range .tasks}}
-                <input type="checkbox"> {{.Title}} - {{.Content}}
-                <br>
-            {{end}}
+            <form action="/updateTask" method="POST">
+                {{range .tasks}}
+                    {{if .Done}}
+                        <input type="checkbox" name="tasks" value="{{.TaskID}}" checked> {{.Title}} - {{.Content}}
+                    {{else}}
+                        <input type="checkbox" name="tasks" value="{{.TaskID}}"> {{.Title}} - {{.Content}}
+                    {{end}}
+                    <br>
+                {{end}}
+                <input type="submit" value="Update">
+            </form>
         {{end}}
     </body>
 </html>

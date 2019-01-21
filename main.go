@@ -12,8 +12,10 @@ import (
 )
 
 type Task struct {
+	TaskID  uint16 `gorm:"primary_key:yes;column:taskID"`
 	Title   string `form:"title" json:"title" xml:"title"  binding:"required"`
 	Content string `form:"content" json:"content" xml:"content" binding:"required"`
+	Done    bool   `form:"done" json:"done" xml:"done"`
 }
 
 var (
@@ -39,7 +41,7 @@ func main() {
 
 	router.GET("/", ViewTask)
 	router.POST("/newTask", CreateTask)
-
+	router.POST("/updateTask", UpdateTask)
 	router.Run(":8080")
 }
 func ViewTask(ctx *gin.Context) {
@@ -54,6 +56,23 @@ func CreateTask(c *gin.Context) {
 		return
 	}
 	db.Create(&t)
+	c.Request.URL.Path = "/"
+	c.Request.Method = "GET"
+	router.HandleContext(c)
+}
+func UpdateTask(c *gin.Context) {
+	var tasks []Task
+	doneTasks := c.PostFormArray("tasks")
+
+	db.Find(&tasks)
+	db.Table("tasks").Update("done", "false")
+
+	for _, t := range doneTasks {
+		var task Task
+		db.Where("taskid = ?", t).First(&task)
+		db.Model(&task).Update("done", true)
+	}
+
 	c.Request.URL.Path = "/"
 	c.Request.Method = "GET"
 	router.HandleContext(c)
