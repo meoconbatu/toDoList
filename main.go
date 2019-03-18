@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	gintemplate "github.com/foolin/gin-template"
 	"github.com/gin-gonic/gin"
@@ -16,6 +17,11 @@ var (
 )
 
 func main() {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+		// log.Fatal("$PORT must be set")
+	}
 	router = gin.Default()
 	router.HTMLRender = gintemplate.Default()
 
@@ -31,5 +37,6 @@ func main() {
 	db.AutoMigrate(&task{})
 	initRoutes()
 
-	router.Run(":8080")
+	// router.Run(":8080")
+	router.Run(":" + port)
 }
