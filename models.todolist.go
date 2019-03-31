@@ -6,10 +6,3 @@ type task struct {
 	Content string `form:"content" json:"content" xml:"content" binding:"required"`
 	Done    bool   `form:"done" json:"done" xml:"done"`
 }
-
-var taskList []task
-
-func getAllTasks() []task {
-	db.Find(&taskList)
-	return taskList
-}

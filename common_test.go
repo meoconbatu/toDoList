@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -9,7 +8,6 @@ import (
 
 	gintemplate "github.com/foolin/gin-template"
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
 )
 
 func TestMain(m *testing.M) {
@@ -27,13 +25,6 @@ func getRouter(withTemplate bool) *gin.Engine {
 	return r
 }
 
-func initDB() *gorm.DB {
-	db, err = gorm.Open("sqlite3", "./gorm.db")
-	if err != nil {
-		fmt.Println(err)
-	}
-	return db
-}
 func testHTTPResponse(t *testing.T, r *gin.Engine, req *http.Request, f func(w *httptest.ResponseRecorder) bool) {
 	w := httptest.NewRecorder()
 

@@ -9,8 +9,9 @@ import (
 )
 
 func TestShowIndexPageUnauthenticated(t *testing.T) {
-	db := initDB()
-	defer db.Close()
+	db := FakeDatasource{}
+	api = API{db}
+	defer api.Close()
 
 	r := getRouter(true)
 
