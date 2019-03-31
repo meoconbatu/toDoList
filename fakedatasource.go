@@ -12,7 +12,7 @@ func (fd FakeDatasource) GetAllTasks() []task {
 func (d FakeDatasource) CreateTask(t task) {
 }
 
-func (d FakeDatasource) UpdateTasks(taskIDs []string) {
+func (d FakeDatasource) UpdateTasks(tasks []task) {
 
 }
 

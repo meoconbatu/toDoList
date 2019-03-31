@@ -2,7 +2,7 @@ package main
 
 type DataSource interface {
 	CreateTask(t task)
-	UpdateTasks(taskIDs []string)
+	UpdateTasks(tasks []task)
 	DeleteTask(t task)
 
 	FindByID(id int) task

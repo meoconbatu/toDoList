@@ -32,17 +32,14 @@ func (s Sqlite) CreateTask(t task) {
 	s.db.Create(&t)
 }
 
-func (s Sqlite) UpdateTasks(taskIDs []string) {
-	s.db.Table("tasks").Update("done", "false")
-	for _, t := range taskIDs {
-		var task task
-		s.db.Where("taskid = ?", t).First(&task)
-		s.db.Model(&task).Update("done", true)
+func (s Sqlite) UpdateTasks(tasks []task) {
+	for _, t := range tasks {
+		s.db.Save(&t)
 	}
 }
 func (s Sqlite) FindByID(id int) task {
 	var t task
-	s.db.Where("taskId = ?", id).First(&t)
+	s.db.Where("taskid = ?", id).First(&t)
 	return t
 }
 func (s Sqlite) DeleteTask(t task) {

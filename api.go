@@ -10,8 +10,8 @@ func (api API) GetAllTasks() []task {
 func (api API) CreateTask(t task) {
 	api.DataSource.CreateTask(t)
 }
-func (api API) UpdateTasks(taskIDs []string) {
-	api.DataSource.UpdateTasks(taskIDs)
+func (api API) UpdateTasks(tasks []task) {
+	api.DataSource.UpdateTasks(tasks)
 }
 func (api API) FindByID(id int) task {
 	return api.DataSource.FindByID(id)
